@@ -2,3 +2,9 @@
 # About the project
 
 *Write a short description about the course and add a link to your github repository here. This is an R markdown (.Rmd) file so you can use R markdown syntax. See the 'Useful links' page in the mooc area (chapter 1) for instructions.*
+
+This is my first ever R Markdown document and I'm super excited about starting to use R Markdown. This has been created for the  Uni of Helsinki course *Introduction to Open Data Science*, held in autumn 2017 in period 2. The course content sounds very useful for my research and I hope I will be able to start using the tools and skills straight away by doing some simple *data analysis and visualisation*. My **github repository** is https://github.com/karoliinaps/IODS-project.
+
+   
+
+
