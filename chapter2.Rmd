@@ -1,7 +1,32 @@
-# Insert chapter 2 title here
+# IODS course chapter 2 Regression analysis 
 
 *Describe the work you have done this week and summarize your learning.*
 
 - Describe your work and results clearly. 
 - Assume the reader has an introductory course level understanding of writing and reading R code as well as statistical methods
 - Assume the reader has no previous knowledge of your data or the more advanced methods you are using  
+
+To perform linear regression analysis in R, the first step is to make sure that the data are in properly formatted in a dataframe. This has already been performed. Now the first step is to bring the data here so that I can start working on it. I have moved the csv file I created earlier in this working directory so I can read it directly. I will call the new dataframe object df:
+
+
+```{r}
+df <- read.csv("learning2014.csv")
+
+```
+
+Function str() shows the structure of the dataframe and tells that it has 166 observations od 7 variables and function head() shows the first six rows of the dataframe. This way I can be sure that the data is correctly imported. 
+```{r}
+str(df)
+head(df)
+```
+
+summary() function prints a summary of each variable.
+```{r}
+
+summary(df)
+```
+
+
+
+
+
