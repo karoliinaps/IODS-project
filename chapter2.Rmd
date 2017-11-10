@@ -26,6 +26,65 @@ summary() function prints a summary of each variable.
 summary(df)
 ```
 
+Here I install the two packages needed to create the graphs. I used RStudio's tool to install the packages first.
+```{r}
+library(GGally)
+library(ggplot2)
+
+# create plot matrix with ggpairs()
+p <- ggpairs(df, mapping = aes(), lower = list(combo = wrap("facethist", bins = 20)))
+p
+```
+
+The plot shows that 
+a) there is an uneven division of gender in the responses
+b) all other variables are visually inspected normally distributed except for age, which is heavily skewed to the left
+c) the highest correlation is between Points and attitude (0.437), correlation being positive and second highest between (negative) between surf and deep. Otherwise there doesn't seem to be any clear relationship between variables as the correlations are weak.
+
+I choose three explanatory variables into my linear regression model to explain the exam points: Attitude, stra and surf. 
+
+_**Linear regression model** assumes a linear relationship between the independent (explanatory) and dependent (target) variables. The goal in the model is to estimate the parameters alpha and beta(s) which is parameter for the intercept of the function and the betas which describe the relationship between the variables. The model assumes that there is unobserble - error - part of the model which is assumed to be normally distributed, the errors are not correlated, the errors have constant variance and the size of a given error does not depend on the explanatory variables. _
+
+Linear regressin modelin R is done with function lm() and print the summary of the model:
+
+```{r}
+names(df)
+df_lm <- lm(Points ~ Attitude + stra + Age, data=df)
+
+summary(df_lm)
+```
+
+The model results (beta coefficients) show that when one unit change in the attitude variable increases Point variable by 0.35, one unit change in the stra variable increases Point variable by 1 and one unit change in the age variable decreases Point variable by 0.08 units. 
+
+Only the intercept and Attitude are statistically significantly different from zero with 5% significance level. This is based on the null hypothesis that the beta coefficient of the independent variable is zero, implying that there is no statistically significan relationship between the two variables. 5% significance level means that we have a 5% chance of wrongly rejecting the null hypothesis (beta=0). 5% is often used in regression analysis as the signifance level to conclude that the independent variable explains the dependent variable. In this model, stra and Age are statistically significantly different from zero with 10% significance level, which is sometimes accepted as a significance level. The explanatory power of the model is not very high, as the coefficient of determination (R-squared) is 0.2 so the independent variables only explain 0.2 of the variance of the dependent variable exam points.
+
+The residuals seem to be more or less normally distributed (median 0.5 and 1Q and 3Q more or less evenly around the median. Min and max indicate, however, that the errors a slightly skewed to the left). 
+
+In the next phase, I will run the model again but remove the independent variables which are not statistically significant with 5% signifance level, ie stra and Age:
+
+```{r}
+
+df_lm2 <- lm(Points ~ Attitude, data=df)
+
+summary(df_lm2)
+
+```
+
+Running the model with only Attitude as explanatory variable did not change the results much: The model results (beta coefficient) show that a one unit change in the attitude variable increases Point variable again by 0.35. 
+
+The explanatory power of the model is lower than in the original mode, as the coefficient of determination (R-squared) is 0.19 so the independent variables only explain 0.19 of the variance of the dependent variable exam points.
+
+The residuals are a little bit more normally distributed as the min of residuals is closer to the median than in the original model. 
+
+To analyse the assumptions described above related to the errors in the model, I plot Residuals vs Fitted values, Normal QQ-plot and Residuals vs Leverage 
+figures which are used for model diagnostics.
+
+```{r}
+par(mfrow = c(2,2))
+plot(df_lm2, which = c(1,2,5))
+
+```
+
 
 
 
