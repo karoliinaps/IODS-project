@@ -1,6 +1,8 @@
 # IODS course chapter 2 Regression analysis 
 
-To perform linear regression analysis in R, the first step is to make sure that the data are in properly formatted in a dataframe. This has already been performed. Now the first step is to bring the data here so that I can start working on it. I have moved the csv file I created earlier in this working directory so I can read it directly. I will call the new dataframe object df:
+**Data analysis**
+
+**STEP 1** To perform linear regression analysis in R, the first step is to make sure that the data are in properly formatted in a dataframe. This has already been performed. Now the first step is to bring the data here so that I can start working on it. I have moved the csv file I created earlier in this working directory so I can read it directly. I will call the new dataframe object df:
 
 
 ```{r}
@@ -20,7 +22,7 @@ summary() function prints a summary of each variable.
 summary(df)
 ```
 
-To visually study the variables in the data set and see how they are correlated, I use GGally and ggplot2 R packages. First I install them using RStudio's tool to install the packages and then I use the library() to load the the packages. Then I create the plot with ggpairs:
+**STEP2** To visually study the variables in the data set and see how they are correlated, I use GGally and ggplot2 R packages. First I install them using RStudio's tool to install the packages and then I use the library() to load the the packages. Then I create the plot with ggpairs:
 ```{r}
 library(GGally)
 library(ggplot2)
@@ -35,13 +37,13 @@ a) there is an uneven division of gender in the responses
 b) all other variables are visually inspected normally distributed except for age, which is heavily skewed to the left
 c) the highest correlation is between Points and attitude (0.437), correlation being positive and second highest between (negative) between surf and deep. Otherwise there doesn't seem to be any clear relationship between variables as the correlations are weak.
 
-I choose three explanatory variables into my linear regression model to explain the exam points: Attitude, stra and surf. 
+**STEP 3 and 4** I choose three explanatory variables into my linear regression model to explain the exam points: Attitude, stra and surf. 
 
 _**Linear regression model** assumes a linear relationship between the independent (explanatory) and dependent (target) variables. The goal in the model is to estimate the parameters alpha and beta(s), where alpha is a parameter for the intercept of the function, and the betas  describe the relationship between the variables. _
 
 _ The statistical significance of the model parameters is tested with t-test and p-value. t-test is a statistical test which is used when we assume that the data is normally distributed. In the linear regression model, we can use the t-test to test whether the alpha and beta coefficients are statistically significantly different from zero. More often, however, the p-value is used to test the null hypothesis that the beta coefficient of the independent variable is zero, implying that there is no statistically significant relationship between the two variables. 5% significance level means that we have a 5% chance of wrongly rejecting the null hypothesis (beta=0). 5% is often used in regression analysis as the signifance level to conclude that the independent variable explains the dependent variable.    _
 
-Linear regressin model in R is done with function lm() and summary() prints the summary of the model:
+Linear regression model in R is done with function lm() and summary() prints the summary of the model:
 
 ```{r}
 names(df)
@@ -75,8 +77,9 @@ The residuals are slightly better normally distributed as the min of residuals i
 To analyse the assumptions described above related to the errors in the model, I plot Residuals vs Fitted values, Normal QQ-plot and Residuals vs Leverage 
 figures which are used for model diagnostics.
 
+**STEP5**
 
-_ The linear regression model assumes that there is unobservable - error - part of the model which is assumed to be normally distributed, the errors are not correlated with the fitted values of the model, the errors have constant variance and the size of a given error does not depend on the model variables. _
+_The linear regression model assumes that there is unobservable - error - part of the model which is assumed to be normally distributed, the errors are not correlated with the fitted values of the model, the errors have constant variance and the size of a given error does not depend on the model variables. _
 
 To study the first assumption on the normality of the errors, we can plot a Normal Q-Q plot. This plots and compares the quantiles of the error term to quantiles of a theoretical normal distribution and plots the points to y=x line. 
 
