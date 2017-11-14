@@ -1,11 +1,5 @@
 # IODS course chapter 2 Regression analysis 
 
-*Describe the work you have done this week and summarize your learning.*
-
-- Describe your work and results clearly. 
-- Assume the reader has an introductory course level understanding of writing and reading R code as well as statistical methods
-- Assume the reader has no previous knowledge of your data or the more advanced methods you are using  
-
 To perform linear regression analysis in R, the first step is to make sure that the data are in properly formatted in a dataframe. This has already been performed. Now the first step is to bring the data here so that I can start working on it. I have moved the csv file I created earlier in this working directory so I can read it directly. I will call the new dataframe object df:
 
 
@@ -26,12 +20,12 @@ summary() function prints a summary of each variable.
 summary(df)
 ```
 
-Here I install the two packages needed to create the graphs. I used RStudio's tool to install the packages first.
+To visually study the variables in the data set and see how they are correlated, I use GGally and ggplot2 R packages. First I install them using RStudio's tool to install the packages and then I use the library() to load the the packages. Then I create the plot with ggpairs:
 ```{r}
 library(GGally)
 library(ggplot2)
 
-# create plot matrix with ggpairs()
+# Here I create the plot matrix with ggpairs()
 p <- ggpairs(df, mapping = aes(), lower = list(combo = wrap("facethist", bins = 20)))
 p
 ```
@@ -43,9 +37,11 @@ c) the highest correlation is between Points and attitude (0.437), correlation b
 
 I choose three explanatory variables into my linear regression model to explain the exam points: Attitude, stra and surf. 
 
-_**Linear regression model** assumes a linear relationship between the independent (explanatory) and dependent (target) variables. The goal in the model is to estimate the parameters alpha and beta(s) which is parameter for the intercept of the function and the betas which describe the relationship between the variables. The model assumes that there is unobserble - error - part of the model which is assumed to be normally distributed, the errors are not correlated, the errors have constant variance and the size of a given error does not depend on the explanatory variables. _
+_**Linear regression model** assumes a linear relationship between the independent (explanatory) and dependent (target) variables. The goal in the model is to estimate the parameters alpha and beta(s), where alpha is a parameter for the intercept of the function, and the betas  describe the relationship between the variables. _
 
-Linear regressin modelin R is done with function lm() and print the summary of the model:
+_ The statistical significance of the model parameters is tested with t-test and p-value. t-test is a statistical test which is used when we assume that the data is normally distributed. In the linear regression model, we can use the t-test to test whether the alpha and beta coefficients are statistically significantly different from zero. More often, however, the p-value is used to test the null hypothesis that the beta coefficient of the independent variable is zero, implying that there is no statistically significant relationship between the two variables. 5% significance level means that we have a 5% chance of wrongly rejecting the null hypothesis (beta=0). 5% is often used in regression analysis as the signifance level to conclude that the independent variable explains the dependent variable.    _
+
+Linear regressin model in R is done with function lm() and summary() prints the summary of the model:
 
 ```{r}
 names(df)
@@ -56,7 +52,7 @@ summary(df_lm)
 
 The model results (beta coefficients) show that when one unit change in the attitude variable increases Point variable by 0.35, one unit change in the stra variable increases Point variable by 1 and one unit change in the age variable decreases Point variable by 0.08 units. 
 
-Only the intercept and Attitude are statistically significantly different from zero with 5% significance level. This is based on the null hypothesis that the beta coefficient of the independent variable is zero, implying that there is no statistically significan relationship between the two variables. 5% significance level means that we have a 5% chance of wrongly rejecting the null hypothesis (beta=0). 5% is often used in regression analysis as the signifance level to conclude that the independent variable explains the dependent variable. In this model, stra and Age are statistically significantly different from zero with 10% significance level, which is sometimes accepted as a significance level. The explanatory power of the model is not very high, as the coefficient of determination (R-squared) is 0.2 so the independent variables only explain 0.2 of the variance of the dependent variable exam points.
+Only the intercept and Attitude are statistically significantly different from zero with 5% significance level, as can be seen in the p-value. In this model, stra and Age are statistically significantly different from zero with 10% significance level, which is sometimes accepted as a significance level. The explanatory power of the model is not very high, as the coefficient of determination (R-squared) is 0.2 so the independent variables only explain 0.2 of the variance of the dependent variable exam points.
 
 The residuals seem to be more or less normally distributed (median 0.5 and 1Q and 3Q more or less evenly around the median. Min and max indicate, however, that the errors a slightly skewed to the left). 
 
@@ -74,10 +70,19 @@ Running the model with only Attitude as explanatory variable did not change the 
 
 The explanatory power of the model is lower than in the original mode, as the coefficient of determination (R-squared) is 0.19 so the independent variables only explain 0.19 of the variance of the dependent variable exam points.
 
-The residuals are a little bit more normally distributed as the min of residuals is closer to the median than in the original model. 
+The residuals are slightly better normally distributed as the min of residuals is closer to the median than in the original model. 
 
 To analyse the assumptions described above related to the errors in the model, I plot Residuals vs Fitted values, Normal QQ-plot and Residuals vs Leverage 
 figures which are used for model diagnostics.
+
+
+_ The linear regression model assumes that there is unobservable - error - part of the model which is assumed to be normally distributed, the errors are not correlated with the fitted values of the model, the errors have constant variance and the size of a given error does not depend on the model variables. _
+
+To study the first assumption on the normality of the errors, we can plot a Normal Q-Q plot. This plots and compares the quantiles of the error term to quantiles of a theoretical normal distribution and plots the points to y=x line. 
+
+To study the second assumption on no correlation between the errors and fitted values - the constant variance of the errors in other words, we plot the Residuals vs Fitted plot which shows the correlation between the two.
+
+To study if single observations have impact on the model we plot the Residuals vs Leverage plot. The figures are plotted with the function plot():
 
 ```{r}
 par(mfrow = c(2,2))
@@ -85,7 +90,12 @@ plot(df_lm2, which = c(1,2,5))
 
 ```
 
+The first correlation plot, Residuals vs Fitted, shows that there is no clear pattern in the correlation between the fitted variables and the error term, thereby not violating the assumption on the independence on the variance of the error from the fitted values.
 
+As the residuals in the The Normal Q-Q  are well aligned on the y=x line, we can conclude that the errors are normally distributed.  
 
+The residuals vs Leverage plot indicates the there are no **individual** observations which would have a high impact on the model. 
+
+We can conclude that the assumptions on the errors are satisfied and we can interpret the results of the regression model based on the linear regression model analysis performed earlier.
 
 
