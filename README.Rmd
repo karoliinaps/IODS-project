@@ -1,5 +1,5 @@
 
-This is my second ever R Markdown document, and created for the Uni of Helsinki course *Introduction to Open Data Science*, held in autumn 2017 in period 2. The link below describes what I am going to do during this course and shows my progress. _The latest updated shows my work for Chapter 2._
+This is my second ever R Markdown document, and created for the Uni of Helsinki course *Introduction to Open Data Science*, held in autumn 2017 in period 2. The link below describes what I am going to do during this course and shows my progress. _The latest updated shows my work for Chapter 3._
 
 The data wrangling part is located in the data directory: https://github.com/karoliinaps/IODS-project/tree/master/data 
 

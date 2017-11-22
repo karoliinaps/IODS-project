@@ -1,0 +1,90 @@
+
+# IODS course chapter 3 LOGISTIC REGRESSION
+
+
+
+First the data set is read into R:
+```{r}
+alc <- read.csv("alc.csv",  header=T)
+```
+
+
+The column names are:
+```{r}
+colnames(alc)
+```
+
+
+This data approach student achievement in secondary education of two Portuguese schools. The data attributes include student grades, demographic, social and school related features) and it was collected by using school reports and questionnaires. Two datasets are provided regarding the performance in two distinct subjects: Mathematics (mat) and Portuguese language (por). In [Cortez and Silva, 2008], the two datasets were modeled under binary/five-level classification and regression tasks. Important note: the target attribute G3 has a strong correlation with attributes G2 and G1. This occurs because G3 is the final year grade (issued at the 3rd period), while G1 and G2 correspond to the 1st and 2nd period grades. It is more difficult to predict G3 without G2 and G1, but such prediction is much more useful (see paper source for more details).
+
+The purpose of the analysis is to **study the relationships between high/low alcohol consumption and some of the other variables in the data**. 
+
+I choose the following variables to study the relationship: sex (student's sex (binary: 'F' - female or 'M' - male)), age (student's age (numeric: from 15 to 22)), failures (number of past class failures (numeric: n if 1<=n<3, else 4)) and health (current health status (numeric: from 1 - very bad to 5 - very good)). *My hypothesis is that sex and failures affect alcohol consumption, but age and health do not.*
+
+
+**ANALYSIS**
+To make the analysis easier, I will create a new dataset alc2 which only contains the  dependent and independent variables
+
+```{r}
+alc2 <- subset(alc, select=c(high_use, sex, age, failures, health))
+library(magrittr)
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+```
+
+
+To numerically and graphically explore the distributions of my chosen variables, I first have to access libraries tidyr, dplyr and ggplot2. I have done them using RStudios built-in tools. 
+
+```{r}
+gather(alc2) %>% ggplot(aes(value)) + facet_wrap("key", scales = "free") + geom_bar()
+
+```
+
+Most of the students haven't failed classes, and the health variable shows that they are in good health. Also, the number of students with low alcohol consumption levels is much lower than high consumption levels.
+
+```{r}
+alc2 %>% group_by(sex, high_use) %>% summarise(count = n(), mean_health = mean(health))
+```
+
+```{r}
+
+g1 <- ggplot(alc2, aes(x = high_use, y = health, col =sex))
+g1 + geom_boxplot() + ylab("health")
+```
+
+```{r}
+g2 <- ggplot(alc2, aes(x = high_use, y = failures, col =sex))
+g2 + geom_boxplot() + ylab("failures")
+
+```
+The plots do not really tell much about the distribution of this variable :)
+
+```{r}
+
+alc2 %>% group_by(sex, high_use) %>% summarise(count = n(), mean_health = mean(health))
+```
+
+Mean health does not seem to differ much between alcohol consumption levels.
+
+```{r}
+alc2 %>% group_by(sex, high_use) %>% summarise(count = n(), mean_failures = mean(failures))
+```
+
+Average number of failures seems to dffer between different consumption levels. 
+
+**LOGISTIC REGRESSION**
+```{r}
+m <- glm(high_use ~ failures + sex + health + age, data = alc2, family = "binomial")
+summary(m)
+coef(m)
+OR <- coef(m) %>% exp
+CI <- confint (m) %>% exp
+cbind(OR, CI)
+
+```
+
+We see that failures and sex are statistically significant variables explaining alcohol consumption so this confirms my hypothesis. 
+
+
+And now I ran out of time :(
